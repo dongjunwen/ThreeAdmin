@@ -20,6 +20,7 @@ import Mask from './UI/Mask';
 import Editor from './UI/Editor';
 import CSSAnimate from './UI/CSSAnimate';
 import CRUD from './Business/CRUD';
+//import PayOrder from './Business/PayOrder';
 
 const routesConfig = (app) => ([
   {
@@ -36,7 +37,7 @@ const routesConfig = (app) => ([
     title: '系统中心',
     component: BaseLayout,
     indexRoute: '/dashboard',
-    childRoutes: [
+   /* childRoutes: [
       Dashboard(app),
       Blank(app),
       Toolbar(app),
@@ -55,6 +56,10 @@ const routesConfig = (app) => ([
       Coming(),
       ScreenLock(),
       NotFound(),
+    ]*/
+    childRoutes: [
+      CRUD(app),
+     // PayOrder(app),
     ]
   }
 ]);
