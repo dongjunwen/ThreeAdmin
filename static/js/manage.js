@@ -36,7 +36,7 @@ function getAll(x, y) {
 	var sel = document.getElementById(x);
 
 	$.ajax({
-		url: fk_url + "/riskCommon/findDictByType?dictType=" + y,
+		url: fk_url + "/sysDict/findDictByType?dictType=" + y,
 		type: "get",
 		dataType: "json", //数据格式 
 		xhrFields: {
@@ -63,7 +63,7 @@ function getDefault(x, y,defaultValue) {
 	var sel = document.getElementById(x);
 
 	$.ajax({
-		url: fk_url + "/riskCommon/findDictByType?dictType=" + y,
+		url: fk_url + "/sysDict/findDictByType?dictType=" + y,
 		type: "get",
 		dataType: "json", //数据格式 
 		xhrFields: {
