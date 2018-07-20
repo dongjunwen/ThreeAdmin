@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>风控后台系统管理</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+	    <link rel="stylesheet" href="../../static/css/font.css">
+		<link rel="stylesheet" href="../../static/css/xadmin.css">
+		<link rel="stylesheet" type="text/css" href="../../static/layui/css/layui.css" />		
+		<script type="text/javascript" src="../../static/js/jquery.min.js"></script>
+		<script type="text/javascript" src="../../static/layui/layui.all.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../../static/layui/layui.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../../static/js/xadmin.js"></script>
+		<script type="text/javascript" src="../../static/js/manage.js"></script>
+		<!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+		<!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+		<script type="text/javascript">
+			$(document).ready(function() {
+				getSysrol(); //取到角色名称下拉框
+				putData();
+			});
+			//接收上个页面传过来的userNo
+			var _userNo = "";
+
+			function getParams(key) {
+				var reg = new RegExp("(^|&)" + key + "=([^&]*)(&|$)");
+				var r = window.location.search.substr(1).match(reg);
+				if(r != null) {
+					return unescape(r[2]);
+				}
+				return null;
+			};
+
+			var sel = "";
+			var jsonData = {
+				pageSize: 10000
+			};
+			//取到角色名称下拉框
+			function getSysrol() {
+				post(
+					"/sysRole/listPage",
+					jsonData,
+					function(result) {
+						var data = result.data.list;
+
+						for(var i = 0; i < data.length; i++) { //循环后台传过来的Json数组  
+							sel += "<option value='" + data[i].roleCode + "'>" + data[i].roleName + "</option>"
+						}
+
+					},
+					function() {
+						alert("error");
+					}
+				);
+			}
+
+			//用户账号
+			_userNo = getParams("userNo");
+			console.log("_userNo=" + _userNo)
+
+			var lis = ""; //table的数据
+			var index = 0; //新增行索引
+			//ajax发送前台数据
+			function putData() {
+				//ajax封装
+				get(
+					"/sysUserRole/" + _userNo,
+					"",
+					function(result) {
+
+						var str;
+						var data = result.data;
+
+						for(var i = 0; i < data.length; i++) { //循环后台传过来的Json数组  
+							str += "<tr>" +
+								"<td><input id='role3" + i + "' class='layui-input' type='text' value='" + data[i].id + "' disabled/></td>" +
+								"<td><input id='role1" + i + "' class='layui-input' type='text' value='" + data[i].userNo + "' disabled/></td>" +
+								"<td><select id='role2" + i + "' disabled>" + sel + "</select></td>" +
+								"<td><a onClick=del(this," + i + ") class='layui-btn layui-btn-xs layui-btn-danger' href='javascript:;'>删除</a></td>" +
+								"</tr>"
+						}
+
+						$("#history_income_list").append(str);
+						//新增行每一行的索引
+						index = data.length;
+
+						for(var i = 0; i < index; i++) {
+
+							$("#role2" + i).val(data[i].roleCode); //角色名称
+						}
+
+					},
+					function() {
+						alert("error");
+					}
+				)
+			}
+
+			function btnAddRow() {
+				//创建新行的id
+				var rId = "tr" + index;
+				//创建是否的radio的name属性
+				var rYesno = "yesno";
+				//创建有效的radio的name属性
+				var rValid = "valid" + index;
+				//随机数
+				//table对象
+				var table1 = document.getElementById("table1");
+				//行数
+				var rowCount = table1.rows.length;
+				//添加到最后一行
+				var newRow = table1.insertRow(rowCount);
+				//添加ID
+				newRow.id = rId;
+				//给第三列添加
+				var newCell1 = newRow.insertCell(0);
+				//内容
+				newCell1.innerHTML = "<td><input  class='layui-input' type='text' disabled='disabled' placeholder='不可编辑' value='' name='pp' /></td>";
+				//给第一列添加
+				var newCell2 = newRow.insertCell(1);
+				//内容
+				newCell2.innerHTML = "<td><input  class='layui-input' type='text' disabled='disabled' placeholder='不可编辑' value='" + _userNo + "' name='pp' /></td>";
+				//给第二列添加
+				var newCell3 = newRow.insertCell(2);
+				//内容
+				newCell3.innerHTML = "<td><select id='role2" + index + "'>" + sel + "</select></td>";
+				//给第四列添加
+				var newCell4 = newRow.insertCell(3);
+				//内容
+				newCell4.innerHTML = "<td><a onClick=save(" + index + ") href='javascript:;' class='layui-btn layui-btn-xs'>保存</a><a onClick=del(this," + index + ") class='layui-btn layui-btn-xs layui-btn-danger' href='javascript:;'>删除</a></td></td>";
+				loadForm() //渲染
+
+				//变量++
+				index++;
+			}
+		</script>
+	</head>
+	<style>
+		.layui-mf-w50 {
+			width: 50%;
+			margin-right: 0px;
+			float: left;
+			clear: none;
+		}
+	</style>
+
+	<body>
+		<div class="x-body">
+			<form class="layui-form">
+				<div class="layui-form-item layui-form-text">
+					<div class="layui-input-block" style="margin-left: 0;">
+						<table class="layui-table" id="table1">
+							<tr id="tr0">
+								<th>ID</th>
+								<th>用户账号</th>
+								<th>角色名称</th>
+								<th>操作</th>
+							</tr>
+							<tbody id="history_income_list">
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label for="L_repass" class="layui-form-label" style="padding: 0;">
+              </label>
+					<button type="button" class="layui-btn" name="button3" id="button3" value="新增一行" onclick="btnAddRow()" />增加</button>
+				</div>
+			</form>
+		</div>
+
+		<script type="text/javascript">
+			//form里面select radio的渲染
+			function loadForm() {
+				layui.use('form', function() {
+					var form = layui.form;
+
+					form.render();
+				});
+			}
+		</script>
+		<script>
+			//保存表格数据
+			function save(i) {
+				var _uNo = _userNo;
+				var _roleCode = $("#role2" + i).val();
+
+				//传入后台数据
+				var jsonData = {
+					userNo: _uNo,
+					roleCode: _roleCode
+				};
+
+				//ajax封装
+				post(
+					"/sysUserRole/create",
+					jsonData,
+					function(result) {
+						var msg = result.retMsg;
+						layer.msg(msg, {
+							icon: 6
+						});
+
+					},
+					function() {
+						alert("error");
+					}
+				);
+
+			}
+
+			//根据ID删除角色
+			function del(obj, i) {
+				//询问框
+				layer.confirm('确认删除？', {
+					btn: ['确认', '取消'] //按钮
+				}, function() {
+					var _id = $("#role3" + i).val();
+
+					//ajax封装
+					post(
+						"/sysUserRole/del/" + _id,
+						"",
+						function(result) {
+
+							var msg = result.retMsg;
+							//发异步删除数据
+							$(obj).parents("tr").remove();
+							layer.msg(msg, {
+								icon: 1,
+								time: 1000
+							});
+
+						},
+						function() {
+							alert("error");
+						}
+					);
+				}, function() {
+					layer.msg('已取消', {
+						icon: 1
+					});
+				});
+			}
+		</script>
+	</body>
+
+</html>

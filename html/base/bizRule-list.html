@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>风控后台系统管理</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+		<link rel="stylesheet" href="../../static/css/font.css">
+		<link rel="stylesheet" href="../../static/css/xadmin.css">
+		<link rel="stylesheet" type="text/css" href="../../static/layui/css/layui.css" />
+		<script type="text/javascript" src="../../static/js/jquery.min.js"></script>
+		<script type="text/javascript" src="../../static/layui/layui.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../../static/js/xadmin.js"></script>
+		<script type="text/javascript" src="../../static/js/manage.js"></script>
+		<script type="text/javascript" src="../../static/layui/layui.all.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../../static/layui/lay/modules/laypage.js"></script>
+		<!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+		<!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+		<script type="text/javascript">
+			$(document).ready(function() {
+				getData();
+
+				//点击搜索时搜索数据
+				$("#sreach").click(function() {
+					getData();
+					currentPageAllAppoint = 1; //当点击搜索的时候，应该回到第一页
+					toPage(); //然后进行分页的初始化
+				});
+				toPage();
+			});
+
+			//分页参数设置 这些全局变量关系到分页的功能
+			var startAllAppoint = 1; //当前页数
+			var limitAllAppoint = 10; //每页显示的数据
+			var currentPageAllAppoint = 1; //第一页
+			var total = 0; //总页数
+
+			//ajax请求后台数据
+			function getData() {
+				var _code = $("#_code").val(); //场景编码
+				var _name = $("#_name").val(); //场景名称
+				//传入后台数据
+				var jsonData = {
+					bizCode: _code,
+					bizName: _name,
+					pageNum: currentPageAllAppoint,
+					pageSize: limitAllAppoint
+				};
+				//,#x-right"清空数据
+				$("#tbody-result,#x-right").empty(); //清空tbody数据
+
+				//ajax封装
+				post(
+					"/bizRule/listPage",
+					jsonData,
+					function(result) {
+
+						var lists = result.data.list; //获取list中的数据
+
+						var str = "";
+						var _url = "";
+
+						for(var i = 0; i < lists.length; i++) { //循环后台传过来的Json数组  
+
+							var _id = lists[i].id; //传入下个页面的订单编号
+							//console.log("orderno="+_id);
+							_url = './bizRule-update.html?id=' + _id; //调整窗口 修改
+							//console.log("_url="+_url);
+
+							str += "<tr>" +
+								"<td>" + lists[i].id + "</td>" +
+								"<td>" + lists[i].bizCode + "</td>" +
+								"<td>" + lists[i].bizName + "</td>" +
+								"<td>" + lists[i].ruleCode + "</td>" +
+								"<td>" + lists[i].ruleName + "</td>" +
+								"<td>" + lists[i].statusName + "</td>" +
+								"<td>" + lists[i].startTime + "</td>" +
+								"<td>" + lists[i].endTime + "</td>" +
+								"<td>" + "<a title='修改'  onclick=\"x_admin_show('修改','" + _url + "')\" href='javascript:;'><i class='layui-icon'>&#xe642;</i></a>" + "</td>" +
+								"</tr>"
+
+						}
+						$("#tbody-result").append(str);
+						$("#x-right").append("共有数据：" + result.data.total + " 条"); //总数据条数
+
+						startAllAppoint = result.data.pageNum; //当前页数(后台返回)
+						console.log("pageNum=" + startAllAppoint);
+
+						total = result.data.total; //总页数(后台返回)
+
+						//alert("success");
+
+					},
+					function() {
+						alert("error");
+					}
+				)
+			}
+
+			function toPage() {
+
+				layui.use(['form', 'laypage', 'layedit', 'layer', 'laydate'], function() {
+					var form = layui.form,
+						layer = layui.layer,
+						layedit = layui.layedit,
+						laydate = layui.laydate,
+						laypage = layui.laypage;
+
+					var nums = 10;
+					//调用分页
+
+					laypage.render({
+						elem: 'paged',
+						count: total, //得到总页数，在layui2.X中使用count替代了，并且不是使用"总页数"，而是"总记录条数"
+						curr: currentPageAllAppoint,
+						jump: function(obj, first) {
+
+							currentPageAllAppoint = obj.curr;
+
+							if(!first) {
+								getData();
+							}
+						}
+					});
+
+				});
+			};
+		</script>
+	</head>
+
+	<body>
+		<div class="x-nav">
+			<span class="layui-breadcrumb" style="visibility: visible;">
+        <a href="javascript:;">首页<span class="layui-box">&gt;</span></a>
+			<a href="javascript:;">基础资料<span class="layui-box">&gt;</span></a>
+			<a><cite>场景规则配置</cite></a>
+			</span>
+			<a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
+				<i class="layui-icon" style="line-height:30px">ဂ</i></a>
+		</div>
+		<div class="x-body">
+			<div class="layui-row">
+				<form class="layui-form layui-col-md12 x-so">
+					<label>场景编码：</label><input type="text" name="code" id="_code" placeholder="请输入场景编码" autocomplete="off" class="layui-input">
+					<label>场景名称：</label><input type="text" name="name" id="_name" placeholder="请输入场景名称" autocomplete="off" class="layui-input">
+					<button type="button" id="sreach" class="layui-btn"><i class="layui-icon">&#xe615;</i></button>
+				</form>
+			</div>
+			<xblock>
+				<button class="layui-btn" onclick="x_admin_show('新增场景规则','./bizRule-add.html')"><i class="layui-icon"></i>新增</button>
+				<span class="x-right" style="line-height:40px"></span>
+			</xblock>
+			<table class="layui-table">
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>场景编码</th>
+						<th>场景名称</th>
+						<th>编码规则</th>
+						<th>规则名称</th>
+						<th>状态</th>
+						<th>生效起始时间</th>
+						<th>生效结束时间</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody id="tbody-result">
+				</tbody>
+			</table>
+
+			<!--分页-->
+			<div class="admin-table-page">
+				<div id="paged" class="page">
+				</div>
+			</div>
+
+		</div>
+	</body>
+
+</html>

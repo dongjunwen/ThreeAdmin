@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>欢迎页面-X-admin2.0</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+	    <link rel="stylesheet" href="../../static/css/font.css">
+		<link rel="stylesheet" href="../../static/css/xadmin.css">
+		<link rel="stylesheet" type="text/css" href="../../static/layui/css/layui.css" />		
+		<script type="text/javascript" src="../../static/js/jquery.min.js"></script>
+		<script type="text/javascript" src="../../static/layui/layui.all.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../../static/layui/layui.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../../static/js/xadmin.js"></script>
+		<script type="text/javascript" src="../../static/js/manage.js"></script>
+		<!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+		<!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+		<script type="text/javascript">
+			$(document).ready(function() {
+				getSelect("useType", "USE_TYPE"); //使用方式下拉框赋值
+				getSelect("andOr", "AND_OR"); //组合方式下拉框赋值
+				getSelect("ruleFreq", "RULE_FREQ"); //频率下拉框赋值
+				getSelect("dealWay", "DEAL_WAY"); //处理方式下拉框赋值
+				getSelect("riskType", "RISK_TYPE"); //风险类型下拉框赋值
+				getSelect("riskLevel", "RISK_LEVEL"); //风险级别下拉框赋值
+				getSelect("alarmType", "ALARM_TYPE"); //报警类型
+			});
+		</script>
+	</head>
+	<style>
+		.layui-mf-w50 {
+			width: 50%;
+			margin-right: 0px;
+			float: left;
+			clear: none;
+		}
+	</style>
+
+	<body>
+		<div class="x-body">
+			<form class="layui-form">
+				<div class="layui-form-item layui-mf-w50">
+					<label for="_ruleCode" class="layui-form-label">
+                  <span class="x-red">*</span>规则编码
+              </label>
+					<div class="layui-input-inline" id="ruleCode">
+						<input type="text" id="_ruleCode" name="_ruleCode" class="layui-input" placeholder="规则编码" value="">
+					</div>
+				</div>
+				<div class="layui-form-item layui-mf-w50">
+					<label for="_ruleName" class="layui-form-label">
+                  <span class="x-red">*</span>规则名称
+              </label>
+					<div class="layui-input-inline" id="ruleName">
+						<input type="text" id="_ruleName" name="_ruleName" class="layui-input" placeholder="规则名称" value="">
+					</div>
+				</div>
+				<div class="layui-form-item layui-mf-w50" id="_useTypeName">
+					<label for="_useTypeName" class="layui-form-label">
+                  <span class="x-red">*</span>使用方式
+              </label>
+					<div class="layui-input-inline">
+						<select name="_useTypeName" class="valid" lay-filter="_useTypeName" id="useType">
+						</select>
+					</div>
+				</div>
+				<div class="layui-form-item layui-mf-w50" id="_andOr">
+					<label for="_andOr" class="layui-form-label">
+                  <span class="x-red">*</span>组合方式
+              </label>
+					<div class="layui-input-inline">
+						<select name="_andOr" lay-filter="_andOr" id="andOr">
+						</select>
+					</div>
+				</div>
+				<div class="layui-form-item layui-mf-w50" id="_ruleFreqName">
+					<label for="_ruleFreqName" class="layui-form-label">
+                  <span class="x-red">*</span>规则频率
+              </label>
+					<div class="layui-input-inline">
+						<select name="_ruleFreqName" lay-filter="_ruleFreqName" id="ruleFreq">
+						</select>
+					</div>
+				</div>
+				<div class="layui-form-item layui-mf-w50" id="_dealWayName">
+					<label for="_dealWayName" class="layui-form-label">
+                  <span class="x-red">*</span>处理方式
+              </label>
+					<div class="layui-input-inline">
+						<select name="_dealWayName" lay-filter="_dealWayName" id="dealWay">
+						</select>
+					</div>
+				</div>
+				<div class="layui-form-item layui-mf-w50" id="_startTime">
+					<label for="_dealWayName" class="layui-form-label">
+                  <span class="x-red">*</span>生效起始日期
+              </label>
+					<div class="layui-input-inline" id="startTime">
+						<input class="layui-input" placeholder="起始日" name="start" id="start">
+					</div>
+				</div>
+				<div class="layui-form-item layui-mf-w50" id="_endTime">
+					<label for="_dealWayName" class="layui-form-label">
+                  <span class="x-red">*</span>生效结束日期
+              </label>
+					<div class="layui-input-inline" id="endTime">
+						<input class="layui-input" placeholder="结束日" name="end" id="end">
+					</div>
+				</div>
+				<div class="layui-form-item layui-mf-w50">
+					<label for="_riskType" class="layui-form-label">
+                  <span class="x-red">*</span>风险类型
+              </label>
+					<div class="layui-input-inline">
+						<select id="riskType">
+						</select>
+					</div>
+				</div>
+				<div class="layui-form-item layui-mf-w50">
+					<label for="_riskLevel" class="layui-form-label">
+                  <span class="x-red">*</span>风险级别
+              </label>
+					<div class="layui-input-inline">
+						<select id="riskLevel">
+						</select>
+					</div>
+				</div>
+				<div class="layui-form-item layui-mf-w50">
+					<label for="_alarmType" class="layui-form-label">
+                  <span class="x-red">*</span>报警类型
+              </label>
+					<div class="layui-input-inline">
+						<select id="alarmType">
+						</select>
+					</div>
+				</div>
+				<div class="layui-form-item layui-mf-w50">
+					<label for="_alarmConfig" class="layui-form-label">
+                                      报警配置
+              </label>
+					<div class="layui-input-inline">
+						<input type="text" id="alarmConfig" name="_alarmConfig" class="layui-input" placeholder="报警配置" value="">
+					</div>
+				</div>
+				<div class="layui-form-item layui-mf-w50">
+					<label for="_ruleStatusName" class="layui-form-label">
+                     <span class="x-red">*</span>状态
+                    </label>
+					<input type="radio" name="ruleStatus" value="Y" title="有效" checked="">
+					<div class="layui-unselect layui-form-radio layui-form-radioed"><i class="layui-anim layui-icon"></i><span>有效</span></div>
+					<input type="radio" name="ruleStatus" value="N" title="无效">
+					<div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><span>无效</span></div>
+				</div>
+				<div class="layui-form-item layui-mf-w50">
+					<label for="_ifLock" class="layui-form-label">
+                    <span class="x-red">*</span>是否锁定
+                    </label>
+					<input type="radio" name="ifLock" value="N" title="不锁定" checked="">
+					<div class="layui-unselect layui-form-radio layui-form-radioed"><i class="layui-anim layui-icon"></i><span>不锁定</span></div>
+					<input type="radio" name="ifLock" value="Y" title="锁定">
+					<div class="layui-unselect layui-form-radio "><i class="layui-anim layui-icon"></i><span>锁定</span></div>
+				</div>
+				<div class="layui-form-item layui-mf-w60">
+					<label for="lockTime" class="layui-form-label">
+                                       锁定时间(单位秒)
+                   </label>
+					<div class="layui-input-inline">
+						<input type="text" id="lockTime" name="lockTime" class="layui-input" placeholder="锁定时间 以秒为单位 0代表永久" value="-1">
+					</div>
+				</div>
+				<div class="layui-form-item layui-mf-w50" style="margin-bottom: 50px;">
+					<label for="L_repass" class="layui-form-label">
+              </label>
+					<button type="button" id="addDeploy" class="layui-btn">保存 </button>
+				</div>
+				<div class="layui-form-item layui-form-text">
+					<div class="layui-input-block" style="margin-left: 0;">
+						<table class="layui-table" id="table1">
+							<tr id="tr0">
+								<th>参数编码</th>
+								<th>参数名称</th>
+								<th>是否必填项</th>
+								<th>比较运算符</th>
+								<th>参数值</th>
+								<th>参数值类型</th>
+								<th>数据来源</th>
+								<th>来源配置</th>
+								<th>状态</th>
+							</tr>
+							<tbody id="history_income_list">
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label for="L_repass" class="layui-form-label" style="padding: 0;">
+              </label>
+					<button type="button" class="layui-btn" name="button3" id="button3" value="新增一行" onclick="btnAddRow()" />增加</button>
+				</div>
+			</form>
+		</div>
+
+		<script type="text/javascript">
+			//form里面select radio的渲染
+			function loadForm() {
+				layui.use('form', function() {
+					var form = layui.form;
+
+					form.render();
+				});
+			}
+			var index = 0; //新增行索引
+			function btnAddRow() {
+				//创建新行的id
+				var rId = "tr" + index;
+				//创建是否的radio的name属性
+				var rYesno = "yesno";
+				//创建有效的radio的name属性
+				var rValid = "valid" + index;
+				//随机数
+				//table对象
+				var table1 = document.getElementById("history_income_list");
+				//行数
+				var rowCount = table1.rows.length;
+				//添加到最后一行
+				var newRow = table1.insertRow(rowCount);
+				//添加ID
+				newRow.id = rId;
+				//给第一列添加
+				var newCell1 = newRow.insertCell(0);
+				//内容
+				newCell1.innerHTML = "<td><input id='col1" + index + "' class='layui-input' type='text' placeholder='编码' value='' name='pp'/></td>";
+				//给第二列添加
+				var newCell2 = newRow.insertCell(1);
+				//内容
+				newCell2.innerHTML = "<td><input id='col2" + index + "' class='layui-input' type='text' placeholder='名称' value='' name='pp'/></td>";
+				//给第三列添加
+				var newCell3 = newRow.insertCell(2);
+				//内容
+				newCell3.innerHTML = "<td><select id='del1" + index + "'><option value='Y'>是</option><option value='N'>否</option></select></td>";
+				loadForm() //渲染
+				//给第四列添加
+				var newCell4 = newRow.insertCell(3);
+				//内容
+				newCell4.innerHTML = "<select  id='del2" + index + "'><option value='>'>大于</option><option value='<'>小于</option><option value='>='>大于等于</option><option value='<='>小于等于</option><option value='<>'>不等于</option><option value='='>等于</option><option value='IN'>存在</option><option value='NOT IN'>不存在</option></select>";
+				loadForm() //渲染
+				//给第五列添加
+				var newCell5 = newRow.insertCell(4);
+				//内容
+				newCell5.innerHTML = "<td><input id='col3" + index + "' class='layui-input' type='text' placeholder='参数值' value='' name='pp'/></td>";
+				//给第六列添加
+				var newCell6 = newRow.insertCell(5);
+				//内容
+				newCell6.innerHTML = "<td><select id='del3" + index + "'><option value='STRING'>文本</option><option value='NUMBER'>数值</option><option value='TIME'>时间</option></select></td>";
+				loadForm() //渲染
+				//给第七列添加
+				var newCell7 = newRow.insertCell(6);
+				//内容
+				newCell7.innerHTML = "<td><select id='col4" + index + "'><option value='REQ'>请求值</option><option value='FLOW'>流量统计</option><option value='SQL'>SQL语句</option></select></td>";
+				//给第八列添加
+				var newCell8 = newRow.insertCell(7);
+				//内容
+				newCell8.innerHTML = "<td><input id='col5" + index + "' class='layui-input' type='text' placeholder='来源配置' value='' name='pp'/></td>";
+				//给第九列添加
+				var newCell9 = newRow.insertCell(8);
+				//内容
+				newCell9.innerHTML = "<td><select id='del4" + index + "'><option value='Y'>有效</option><option value='N'>无效</option></select></td>";
+				loadForm() //渲染
+				//变量++
+				index++;
+			}
+		</script>
+		<script>
+			layui.use('laydate', function() {
+				var laydate = layui.laydate;
+
+				//执行一个laydate实例
+				laydate.render({
+					elem: '#start', //指定元素
+					type: 'datetime'
+				});
+				//执行一个laydate实例
+				laydate.render({
+					elem: '#end', //指定元素
+					type: 'datetime'
+				});
+
+			});
+			
+			
+
+			$("#addDeploy").click(function() {
+
+				var _ruleCode = $("#_ruleCode").val(); //规则编码
+				var _ruleName = $("#_ruleName").val(); //规则名称
+				var _useType = $("#useType option:selected").val(); //使用方式
+				var _andOr = $("#andOr option:selected").val(); //组合方式
+				var _ruleFreqName = $("#ruleFreq option:selected").val(); //规则频率
+				var _dealWayName = $("#dealWay option:selected").val(); //处理方式
+				var _ruleStatusName = $("input[name='ruleStatus']:checked").val(); //状态
+				var _startTime = $("#start").val(); //开始时间
+				var _endTime = $("#end").val(); //结束时间
+				var _riskType = $("#riskType option:selected").val(); //风险类型
+				var _riskLevel = $("#riskLevel option:selected").val(); //风险级别
+				var _alarmType = $("#alarmType option:selected").val(); //报警类型
+				var _alarmConfig = $("#alarmConfig").val(); //报警配置
+				
+				var _lockTime = $("#lockTime").val(); //锁定时间
+				 var _ifLock = $("input[name='ifLock']:checked").val();//是否锁定
+				
+				
+
+				var mytable = document.getElementById("history_income_list"); //table
+
+				var _riskRuleParamVoList = new Array();
+				//遍历table的数据
+				for(var i = 0, rows = mytable.rows.length; i < rows; i++) {
+
+					var tableData = {
+						paramCode: $("#col1" + i).val(),
+						paramName: $("#col2" + i).val(),
+						isNeed: $("#del1" + i).val(),
+						validRule: $("#del2" + i).val(),
+						paramValue: $("#col3" + i).val(),
+						paramValueType: $("#del3" + i).val(),
+						ruleStatus: $("#del4" + i).val(),
+						paramValueSource: $("#col4" + i).val(),
+						paramSourceConfig: $("#col5" + i).val()
+					};
+
+					_riskRuleParamVoList.push(tableData);
+				}
+				//传入后台数据
+				var jsonData = {
+					ruleCode: _ruleCode,
+					ruleName: _ruleName,
+					useType: _useType,
+					andOr: _andOr,
+					ruleFreq: _ruleFreqName,
+					dealWay: _dealWayName,
+					ruleStatus: _ruleStatusName,
+					startTime: _startTime,
+					endTime: _endTime,
+					riskType: _riskType,
+					riskLevel: _riskLevel,
+					alarmType: _alarmType,
+					alarmConfig: _alarmConfig,
+					ifLock:_ifLock,
+					lockTime:_lockTime,
+					riskRuleParamVoList: _riskRuleParamVoList
+				};
+
+				//ajax封装
+				post(
+					"/riskRule/saveData",
+					jsonData,
+					function(result) {
+						var msg = result.retMsg;
+						layer.alert(msg, {
+							icon: 6
+						}, function() {
+							// 获得frame索引
+							var index = parent.layer.getFrameIndex(window.name);
+							//关闭当前frame
+							parent.layer.close(index);
+							// 父页面刷新  
+							parent.location.reload();
+						});
+
+					},
+					function() {
+						alert("error");
+					}
+				)
+			})
+		</script>
+	</body>
+
+</html>

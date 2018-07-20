@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>欢迎页面-X-admin2.0</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+		<link rel="stylesheet" href="../../static/css/font.css">
+		<link rel="stylesheet" href="../../static/css/xadmin.css">
+		<link rel="stylesheet" type="text/css" href="../../static/layui/css/layui.css" />		
+		<script type="text/javascript" src="../../static/js/jquery.min.js"></script>
+		<script type="text/javascript" src="../../static/layui/layui.all.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../../static/layui/layui.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../../static/js/xadmin.js"></script>
+		<script type="text/javascript" src="../../static/js/manage.js"></script>
+		<!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+		<!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+		<script type="text/javascript">
+			$(document).ready(function() {
+				getSelect("bizCode","BIZ_CODE");//场景编码下拉框赋值
+			});
+		</script>
+	</head>
+	<style>
+		.layui-mf-w50 {width: 50%;margin-right: 0px;float: left;clear: none;}
+	</style>
+
+	<body>
+		<div class="x-body">
+			<form class="layui-form">
+				<div class="layui-form-item layui-mf-w50">
+					<label for="_ruleCode" class="layui-form-label">
+                  <span class="x-red">*</span>场景名称
+              </label>
+					<div class="layui-input-inline">
+						<select class="valid" lay-filter="_useTypeName" id="bizCode">
+						</select>
+					</div>
+				</div>
+				<div class="layui-form-item layui-mf-w50" id="_useTypeName">
+					<label for="_useTypeName" class="layui-form-label">
+                  <span class="x-red">*</span>规则编码
+              </label>
+					<div class="layui-input-inline">
+						<input type="text" id="ruleCode" name="ruleCode" class="layui-input" placeholder="规则编码" value="">
+					</div>
+				</div>
+				<div class="layui-form-item layui-mf-w50" id="_andOr">
+					<label for="_andOr" class="layui-form-label">
+                  <span class="x-red">*</span>规则名称
+              </label>
+					<div class="layui-input-inline">
+						<input type="text" id="ruleName" name="ruleName" class="layui-input" placeholder="规则名称" value="">
+					</div>
+				</div>
+				<div class="layui-form-item layui-mf-w50" id="_startTime">
+					<label for="_dealWayName" class="layui-form-label">
+                  <span class="x-red">*</span>生效起始日期
+              </label>
+					<div class="layui-input-inline" id="startTime">
+						<input class="layui-input" placeholder="起始日" name="start" id="start">
+					</div>
+				</div>
+				<div class="layui-form-item layui-mf-w50" id="_endTime">
+					<label for="_dealWayName" class="layui-form-label">
+                  <span class="x-red">*</span>生效结束日期
+              </label>
+					<div class="layui-input-inline" id="endTime">
+						<input class="layui-input" placeholder="结束日" name="end" id="end">
+					</div>
+				</div>
+				<div class="layui-form-item layui-mf-w50">
+					<label for="_ruleStatusName" class="layui-form-label">
+                  <span class="x-red">*</span>状态
+              </label>
+					<input type="radio" name="ruleStatus" value="Y" title="有效" checked="">
+					<div class="layui-unselect layui-form-radio layui-form-radioed"><i class="layui-anim layui-icon"></i><span>有效</span></div>
+					<input type="radio" name="ruleStatus" value="N" title="无效">
+					<div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><span>无效</span></div>
+				</div>
+				<div class="layui-form-item layui-mf-w50" style="margin-bottom: 50px;">
+					<label for="L_repass" class="layui-form-label">
+              </label>
+					<button type="button" id="addDeploy" class="layui-btn">保存 </button>
+				</div>
+				</div>
+			</form>
+		</div>
+
+		<script type="text/javascript">
+			//form里面select radio的渲染
+			function loadForm() {
+				layui.use('form', function() {
+					var form = layui.form;
+
+					form.render();
+				});
+			}
+		</script>
+		<script>
+			layui.use('laydate', function() {
+				var laydate = layui.laydate;
+
+				//执行一个laydate实例
+				laydate.render({
+					elem: '#start', //指定元素
+					type: 'datetime'
+				});
+
+				//执行一个laydate实例
+				laydate.render({
+					elem: '#end', //指定元素
+					type: 'datetime'
+				});
+
+			});
+			
+			$("#addDeploy").click(function(){
+				
+					var _bizCode = $("#bizCode option:selected").val(); //场景名称
+					var _bizName = $("#bizCode option:selected").text(); //场景名称
+					var _ruleCode = $("#ruleCode").val(); //规则编码
+			        var _ruleName = $("#ruleName").val(); //规则名称
+			        var _ruleStatusName = $("input[name='ruleStatus']:checked").val();//状态
+			        var _startTime = $("#start").val(); //开始时间
+			        var _endTime = $("#end").val();//结束时间
+			        
+		    			//传入后台数据
+			    		var jsonData = {
+			    		  bizCode: _bizCode,
+			    		  bizName: _bizName,
+						  ruleName: _ruleName,
+						  ruleCode: _ruleCode,
+						  endTime: _endTime,
+						  startTime: _startTime,
+						  status: _ruleStatusName
+			      	};
+		    			
+		    			//ajax封装
+				post(
+					"/bizRule/insert",
+					jsonData,
+					function(result) {
+		    				var msg = result.retMsg;
+		    				layer.alert(msg, {icon: 6},function () {
+			                // 获得frame索引
+			                var index = parent.layer.getFrameIndex(window.name);
+			                //关闭当前frame
+			                parent.layer.close(index);
+			                 // 父页面刷新  
+			                parent.location.reload();
+			           		 });
+		               
+	    			},
+	    			function () {   
+			             alert("error");
+			            }
+	    			)
+			})
+		</script>
+	</body>
+
+</html>

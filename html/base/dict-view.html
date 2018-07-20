@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+  
+  <head>
+    <meta charset="UTF-8">
+    <title>风控后台系统管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+		<link rel="stylesheet" href="../../static/css/font.css">
+		<link rel="stylesheet" href="../../static/css/xadmin.css">
+		<script type="text/javascript" src="../../static/js/jquery.min.js"></script>
+		<script type="text/javascript" src="../../static/layui/layui.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../../static/js/xadmin.js"></script>
+		<script type="text/javascript" src="../../static/js/manage.js"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+<script type="text/javascript">
+	$(document).ready(function() {
+		getData();
+		
+	});
+	//接收父级传来的id
+	var _id = "";
+	function getParams(key) {
+		var reg = new RegExp("(^|&)" + key + "=([^&]*)(&|$)");
+		var r = window.location.search.substr(1).match(reg);
+		if(r != null) {
+			return unescape(r[2]);
+		}
+		return null;
+	};
+	_id = getParams("id"); //拿到id
+
+	//ajax请求后台数据
+	function getData() {
+        
+		//传入后台数据
+		var jsonData = {
+			id: _id,
+		};
+
+		//ajax封装
+				get(
+					"/riskDict/findById",
+					jsonData,
+					function(result) {
+				var lists = result.data; //获取list中的数据
+				
+				$("#_id").val(lists.id);//字典代码
+				$("#_dictCode").val(lists.dictCode);//字典代码
+				$("#_dictName").val(lists.dictName);//字典名称
+				$("#_dictValue").val(lists.dictValue);//字典值
+				$("#_dictDesc").val(lists.dictDesc);//字典描述
+				$("#_dictValueType").val(lists.dictValueType);//字典值类型
+				$("#_isValid").val(lists.isValid);//是否生效
+				$("#_pdictCode").val(lists.pdictCode);//上级字典代码
+
+			},
+			function() {
+				alert("error");
+			}
+		)
+	}
+</script>
+  </head>
+  
+  <body>
+    <div class="x-body">
+        <form class="layui-form">
+        	<div class="layui-form-item" hidden="hidden">
+              <label for="_id" class="layui-form-label">
+                  id
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="_id" name="email" required="" lay-verify="code"
+                  autocomplete="off" class="layui-input" disabled>
+              </div>
+              <div class="layui-form-mid layui-word-aux">
+                 <span class="x-red">*</span>不可修改
+              </div>
+          </div>
+          <div class="layui-form-item">
+              <label for="_dictCode" class="layui-form-label">
+                  	字典代码
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="_dictCode" name="email" required="" lay-verify="code"
+                  autocomplete="off" class="layui-input" disabled>
+              </div>
+              <div class="layui-form-mid layui-word-aux">
+                 <span class="x-red">*</span>不可修改
+              </div>
+          </div>
+          <div class="layui-form-item">
+              <label for="_dictName" class="layui-form-label">
+                  <span class="x-red">*</span>字典名称
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="_dictName" name="username" required="" lay-verify="nikename"
+                  autocomplete="off" class="layui-input" disabled>
+              </div>
+          </div>
+          <div class="layui-form-item">
+              <label for="_dictValue" class="layui-form-label">
+                  <span class="x-red">*</span>字典值
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="_dictValue" name="pass" required="" lay-verify="pass"
+                  autocomplete="off" class="layui-input" disabled>
+              </div>
+              <div class="layui-form-mid layui-word-aux">
+                		<span class="x-red">*</span>
+              </div>
+          </div>
+          <div class="layui-form-item">
+              <label for="_dictDesc" class="layui-form-label">
+                  <span class="x-red">*</span>字典描述
+              </label>
+              <div class="layui-input-inline">
+                  <textarea id="_dictDesc" rows="3" cols="20" class="layui-input" disabled>
+				  </textarea>
+              </div>
+             
+          </div>
+          <div class="layui-form-item">
+              <label for="_dictValueType" class="layui-form-label">
+                  <span class="x-red">*</span>字典值类型
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="_dictValueType" name="repass" required="" lay-verify="repass"
+                  autocomplete="off" class="layui-input" disabled>
+              </div>
+          </div>
+          <div class="layui-form-item">
+              <label for="_isValid" class="layui-form-label">
+                  <span class="x-red">*</span>是否生效
+              </label>
+              <div class="layui-input-inline">
+                  <select id="_isValid" disabled>
+										<option value="Y">Y</option>
+										<option value="N">N</option>
+								  </select>
+              </div>
+              <div class="layui-form-mid layui-word-aux">
+                 <span class="x-red">*</span>
+              </div>
+          </div>
+          <div class="layui-form-item">
+              <label for="_pdictCode" class="layui-form-label">
+                  <span class="x-red">*</span>上级字典代码
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="_pdictCode" name="repass" required="" lay-verify="repass"
+                  autocomplete="off" class="layui-input" disabled>
+              </div>
+          </div>
+      </form>
+    </div>
+    <script>
+        layui.use(['form','layer'], function(){
+            $ = layui.jquery;
+          var form = layui.form
+          ,layer = layui.layer;
+        });
+    </script>
+  </body>
+
+</html>

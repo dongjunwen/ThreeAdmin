@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>欢迎页面-X-admin2.0</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+	    <link rel="stylesheet" href="../../static/css/font.css">
+		<link rel="stylesheet" href="../../static/css/xadmin.css">
+		<link rel="stylesheet" type="text/css" href="../../static/layui/css/layui.css" />		
+		<script type="text/javascript" src="../../static/js/jquery.min.js"></script>
+		<script type="text/javascript" src="../../static/layui/layui.all.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../../static/layui/layui.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../../static/js/xadmin.js"></script>
+		<script type="text/javascript" src="../../static/js/manage.js"></script>
+		<!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+		<!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+		<script type="text/javascript">
+			$(document).ready(function() {
+				getSelect("sourceType", "SOURCE_TYPE"); //资源类型下拉框赋值
+				//接收上个页面传过来的id
+				var pid =  getParams("pid");
+				$("#psourceNo").val(pid);
+				var sourceLevel=getParams("sourceLevel");
+				sourceLevel=Number(sourceLevel)+1;
+				$("#sourceLevel").val(sourceLevel);
+			});
+
+
+			function getParams(key) {
+				var reg = new RegExp("(^|&)" + key + "=([^&]*)(&|$)");
+				var r = window.location.search.substr(1).match(reg);
+				if(r != null) {
+					return unescape(r[2]);
+				}
+				return null;
+			};
+			//事件编号
+			
+			
+			
+		</script>
+	</head>
+	<style>
+		.layui-mf-w50 {
+			width: 50%;
+			margin-right: 0px;
+			float: left;
+			clear: none;
+		}
+	</style>
+
+	<body>
+		<div class="x-body">
+			<form class="layui-form">
+				<div class="layui-form-item layui-mf-w50">
+					<label for="_sourceNo" class="layui-form-label">
+                  <span class="x-red">*</span>资源编号
+              </label>
+					<div class="layui-input-inline" id="ruleCode">
+						<input type="text" id="sourceNo" name="_sourceNo" class="layui-input" placeholder="资源编号" value="">
+					</div>
+				</div>
+				<div class="layui-form-item layui-mf-w50">
+					<label for="_sourceName" class="layui-form-label">
+                  <span class="x-red">*</span>资源名称
+              </label>
+					<div class="layui-input-inline" id="ruleName">
+						<input type="text" id="sourceName" name="_sourceName" class="layui-input" placeholder="资源名称" value="">
+					</div>
+				</div>
+				
+				<div class="layui-form-item layui-mf-w50">
+					<label for="_sourceType" class="layui-form-label">
+                  <span class="x-red">*</span>资源类型
+              </label>
+					<div class="layui-input-inline">
+						<select id="sourceType">
+						</select>
+					</div>
+				</div>
+				<div class="layui-form-item layui-mf-w50">
+					<label for="_reqUrl" class="layui-form-label">
+                  <span class="x-red">*</span>请求路径
+              </label>
+					<div class="layui-input-inline">
+						<input type="text" id="reqUrl" name="_reqUrl" class="layui-input" placeholder="请求路径" value="">
+					</div>
+				</div>
+				<div class="layui-form-item layui-mf-w50">
+					<label for="_sourceIcon" class="layui-form-label">
+                  <span class="x-red">*</span>图标
+              </label>
+					<div class="layui-input-inline">
+						<input type="text" id="sourceIcon" name="_sourceIcon" class="layui-input" placeholder="图标" value="">
+					</div>
+				</div>
+				<div class="layui-form-item layui-mf-w50" id="_startTime">
+					<label for="_sortOrder" class="layui-form-label">
+                  <span class="x-red">*</span>排序
+              </label>
+					<div class="layui-input-inline">
+						<input type="text" id="sortOrder" name="_sortOrder" class="layui-input" placeholder="排序" value="">
+					</div>
+				</div>
+				
+				<div class="layui-form-item layui-mf-w50">
+					<label for="_ifVisible" class="layui-form-label">
+                  <span class="x-red">*</span>是否显示
+              </label>
+					<div class="layui-input-inline">
+						<select id="ifVisible">
+							<option value="Y">是</option>
+							<option value="N">否</option>
+						</select>
+					</div>
+				</div>
+				
+				<div class="layui-form-item layui-mf-w50" style="display: none;">
+					<label for="_psourceNo" class="layui-form-label">
+                 		 <span class="x-red">*</span>上级资源编号
+             		 </label>
+					<div class="layui-input-inline">
+						<input type="hidden" id="psourceNo" name="_psourceNo" class="layui-input" placeholder="上级资源编号" value="">
+					</div>
+				</div>
+				<div class="layui-form-item layui-mf-w50" style="display: none;">
+					<label for="_sourceLevel" class="layui-form-label">
+                  		<span class="x-red">*</span>级别
+              		</label>
+					<div class="layui-input-inline" id="endTime">
+						<input type="hidden" id="sourceLevel" name="_sourceLevel" class="layui-input" placeholder="级别" value="">
+					</div>
+				</div>
+				
+				<div class="layui-form-item layui-mf-w50" style="margin-bottom: 50px;">
+					<label for="L_repass" class="layui-form-label">
+              </label>
+					<button type="button" id="addSysResource" class="layui-btn">保存 </button>
+				</div>
+			</form>
+		</div>
+
+		<script>
+
+			$("#addSysResource").click(function() {
+
+				var _sourceNo = $("#sourceNo").val(); //资源编号
+				var _sourceName = $("#sourceName").val(); //资源名称
+				var _psourceNo = $("#psourceNo").val(); //上级资源编号
+				var _sourceType = $("#sourceType option:selected").val(); //资源类型
+				var _reqUrl = $("#reqUrl").val(); //请求路径
+				var _sourceIcon = $("#sourceIcon").val(); //图标
+				var _sortOrder = $("#sortOrder").val(); //排序
+				var _sourceLevel = $("#sourceLevel").val(); //级别
+				var _ifVisible = $("#ifVisible option:selected").val(); //级别
+
+				//传入后台数据
+				var jsonData = {
+					sourceNo: _sourceNo,
+					sourceName: _sourceName,
+					psourceNo: _psourceNo,
+					sourceType: _sourceType,
+					reqUrl: _reqUrl,
+					sourceIcon: _sourceIcon,
+					sortOrder: _sortOrder,
+					sourceLevel: _sourceLevel,
+					ifVisible: _ifVisible
+				};
+
+				//ajax封装
+				post(
+					"/sysResource/create",
+					jsonData,
+					function(result) {
+						var msg = result.retMsg;
+						layer.alert(msg, {
+							icon: 6
+						}, function() {
+							// 获得frame索引
+							var index = parent.layer.getFrameIndex(window.name);
+							//关闭当前frame
+							parent.layer.close(index);
+							// 父页面刷新  
+							parent.location.reload();
+						});
+
+					},
+					function() {
+						alert("error");
+					}
+				)
+			})
+		</script>
+	</body>
+
+</html>

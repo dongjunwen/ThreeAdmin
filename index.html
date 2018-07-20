@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>三人行电商后台管理系统</title>
+		<link rel="stylesheet" type="text/css" href="./static/layui/css/layui.css" />
+		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+		<link rel="stylesheet" href="./static/css/font.css">
+		<link rel="stylesheet" href="./static/css/xadmin.css">
+		<script type="text/javascript" src="./static/layui/layui.all.js" charset="utf-8"></script>
+		<script type="text/javascript" src="./static/layui/layui.js" charset="utf-8"></script>
+		<script type="text/javascript" src="./static/js/jquery.min.js"></script>
+		<script type="text/javascript" src="./static/js/xadmin.js"></script>
+		<script type="text/javascript" src="./static/js/manage.js"></script>
+		<link rel="stylesheet" href="static/layui/css/layui.css">
+		<link rel="stylesheet" href="static/css/layout.css">
+
+	</head>
+
+	<body class="layui-layout-body layui-unselect">
+		<div class="layui-layout layui-layout-admin">
+			<!--顶部导航开始-->
+			<div class="layui-header container">
+				<div class="logo">
+					<a href="./index.html">电商后台管理</a>
+				</div>
+				<div class="left_open">
+					<!--侧栏缩进图标开始-->
+					<li class="lying-nav-fold"><i class="layui-icon layui-icon-shrink-right"></i></li>
+					<!--侧栏缩进图标结束-->
+				</div>
+				<ul class="layui-nav layui-layout-right" style="width: 210px;">
+					<li class="lying-nav-item" lay-unselect style="width: 80px;float: left;text-align: center;margin-right: 0 5px;">
+						<a href="javascript:;" id="username" style="color: #FFFFFF!important;height: 50px;line-height: 50px;"></a>
+						<dl class="layui-nav-child" style="min-width: 100px!important;">
+							<dd style=" text-align: center;">
+								<a href="javascript:;" onclick="x_admin_show('修改密码','./modiPass.html')">修改密码</a>
+							</dd>
+							<dd style=" text-align: center;">
+								<a href="javascript:;" id="logout">退出</a>
+							</dd>
+						</dl>
+					</li>
+					<li class="lying-nav-item" lay-unselect style="width: 60px;float: left;margin: 0 15px;">
+						<a href="./index.html" style="color: #FFFFFF!important;height: 50px;line-height: 50px;">前台首页</a>
+					</li>
+					<li class="lying-nav-item" lay-unselect style="width: 10px;float: left;margin: 0 15px;">
+						<a href="javascript:;" id="pop-right" style="color: #FFFFFF!important;height: 50px;line-height: 50px;"><i class="layui-icon layui-icon-more-vertical"></i></a>
+					</li>
+				</ul>
+
+			</div>
+			<!--顶部导航结束-->
+
+			<!--侧边菜单开始-->
+			<div class="layui-side">
+				<div class="layui-side-scroll">
+					<ul class="layui-nav-tree" id="nav">
+
+						<!--<li class="lying-nav-item lying-nav-open">
+							<a class="lying-nav-header" href="javascript:;">
+								<div class="lying-nav-icon"><i class="layui-icon">&#xe68e;</i></div>
+								<span class="lying-nav-title">基础资料</span>
+							</a>
+							<dl class="lying-nav-child">
+								<dd>
+									<a href="javascript:;" lying-src="html/base/dict-list.html">
+										<div class="lying-nav-icon"><i class="iconfont">&#xe6a7;</i></div>
+										<span class="lying-nav-title">基础数据字典</span>
+									</a>
+								</dd>
+								<dd>
+									<a href="javascript:;" lying-src="html/base/rule-list.html">
+										<div class="lying-nav-icon"><i class="iconfont">&#xe6a7;</i></div>
+										<span class="lying-nav-title">风控规则配置</span>
+									</a>
+								</dd>
+								<dd>
+									<a href="javascript:;" lying-src="html/base/bizRule-list.html">
+										<div class="lying-nav-icon"><i class="iconfont">&#xe6a7;</i></div>
+										<span class="lying-nav-title">场景规则配置</span>
+									</a>
+								</dd>
+
+							</dl>
+						</li>
+
+						<li class="lying-nav-item ">
+							<a class="lying-nav-header" href="javascript:;">
+								<div class="lying-nav-icon"><i class="iconfont">&#xe723;</i></div>
+								<span class="lying-nav-title">风险事件</span>
+							</a>
+							<dl class="lying-nav-child">
+								<dd>
+									<a href="javascript:;" lying-src="html/order/riskOrder-list.html">
+										<div class="lying-nav-icon"><i class="iconfont">&#xe6a7;</i></div>
+										<span class="lying-nav-title">风险事件查询</span>
+									</a>
+								</dd>
+								<dd>
+									<a href="javascript:;" lying-src="html/order/riskOrder-audit-list.html">
+										<div class="lying-nav-icon"><i class="iconfont">&#xe6a7;</i></div>
+										<span class="lying-nav-title">风控订单审核</span>
+									</a>
+								</dd>
+							</dl>
+						</li>
+
+						<li class="lying-nav-item ">
+							<a class="lying-nav-header" href="javascript:;">
+								<div class="lying-nav-icon"><i class="layui-icon">&#xe629;</i></div>
+								<span class="lying-nav-title">风控报表</span>
+							</a>
+							<dl class="lying-nav-child">
+								<dd>
+									<a href="javascript:;" lying-src="html/report/risk-total-report.html">
+										<div class="lying-nav-icon"><i class="iconfont">&#xe6a7;</i></div>
+										<span class="lying-nav-title">统计报表</span>
+									</a>
+								</dd>
+								<dd>
+									<a href="javascript:;" lying-src="html/report/risk-order-total-report.html">
+										<div class="lying-nav-icon"><i class="iconfont">&#xe6a7;</i></div>
+										<span class="lying-nav-title">风控订单汇总报表</span>
+									</a>
+								</dd>
+								<dd>
+									<a href="javascript:;" lying-src="html/report/oper-log.html">
+										<div class="lying-nav-icon"><i class="iconfont">&#xe6a7;</i></div>
+										<span class="lying-nav-title">操作日志</span>
+									</a>
+								</dd>
+							</dl>
+						</li>
+
+						<li class="lying-nav-item ">
+							<a class="lying-nav-header" href="javascript:;">
+								<div class="lying-nav-icon"><i class="iconfont">&#xe6b8;</i></div>
+								<span class="lying-nav-title">系统管理</span>
+							</a>
+							<dl class="lying-nav-child">
+								<dd>
+									<a href="javascript:;" lying-src="html/system/sysResource-listPage.html">
+										<div class="lying-nav-icon"><i class="iconfont">&#xe6a7;</i></div>
+										<span class="lying-nav-title">资源信息</span>
+									</a>
+								</dd>
+								<dd>
+									<a href="javascript:;" lying-src="html/system/sysRole-listPage.html">
+										<div class="lying-nav-icon"><i class="iconfont">&#xe6a7;</i></div>
+										<span class="lying-nav-title">角色信息</span>
+									</a>
+								</dd>
+								<dd>
+									<a href="javascript:;" lying-src="html/system/user-listPage.html">
+										<div class="lying-nav-icon"><i class="iconfont">&#xe6a7;</i></div>
+										<span class="lying-nav-title">账户信息</span>
+									</a>
+								</dd>
+							</dl>
+						</li>-->
+
+					</ul>
+				</div>
+			</div>
+			<!--侧边菜单结束-->
+
+			<!--内容主体区域开始-->
+			<div class="layui-body">
+				<div class="layui-tab layui-tab-brief" lay-allowClose="true" lay-filter="tabs">
+					<div class="lying-tab-goleft"><i class="layui-icon">&#xe65a;</i></div>
+					<div class="lying-tab-goright"><i class="layui-icon">&#xe65b;</i></div>
+					<ul class="layui-tab-title">
+						<li class="layui-this"><i class="layui-icon">&#xe68e;</i> 首页</li>
+					</ul>
+					<div class="layui-tab-content">
+						<div class="layui-tab-item layui-show">
+							<iframe src="html/main.html"></iframe>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--内容主体区域结束-->
+		</div>
+
+		<!-- 底部开始 -->
+		<div class="footer" style="z-index: 999!important;">
+			<div class="copyright">©All Rights Reserved 2018 三人行技术服务有限公司 沪ICP备11015623号-1</div>
+		</div>
+		<!-- 底部结束 -->
+	</body>
+	<script>
+		layui.config({
+			base: 'static/js/'
+		}).use(['layout'], function() {
+			var $ = layui.$,
+				layout = layui.layout;
+		});
+	</script>
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+			gerSysResource();
+			//ajax封装-获取用户名
+			getAsync(
+				"/getCurrentUser",
+				"",
+				function(result) {
+					var retCode = result.retCode;
+					var _data = result.data; //取到数据
+					var str = "";
+
+					if(retCode == 200) {
+						str = _data.userName;
+					} else {
+						str = "未知用户"
+					}
+
+					$("#username").append(str);
+				},
+				function() {
+					alert("error");
+				}
+			);
+
+		});
+
+		function genMenu(menuList) {
+			var menuStr = "";
+			for(var i = 0; i < menuList.length; i++) {
+				var menu = menuList[i];
+				if(menu.bpid == "" || menu.bpid == undefined) {
+					menuStr = menuStr +
+						"<li class='lying-nav-item' >" +
+						"<a class='lying-nav-header' href='javascript:;'>" +
+						"<div class='lying-nav-icon'><i class='layui-icon'>" + menu.icon + "</i></div>" +
+						"<span class='lying-nav-title'>" + menu.name + "</span>" +
+						"</a>";
+					menuStr = menuStr + findChildMenu(menu.id, menuList);
+					menuStr = menuStr + "</li>";
+				}
+			}
+			$("#nav").append(menuStr);
+
+		}
+
+		function findChildMenu(bpid, menuList) {
+			var subMenuStr = "";
+			for(var i = 0; i < menuList.length; i++) {
+				var menu = menuList[i];
+				if(menu.bpid != undefined && bpid == menu.bpid) {
+					subMenuStr = subMenuStr +
+						"<dl class='lying-nav-child' >" +
+						"<dd>" +
+						"<a href='javascript:;' lying-src='" + menu.route + "' >" +
+						"<div class='lying-nav-icon'><i class='iconfont'>&#xe6a7;</i></div>" +
+						"<span class='lying-nav-title' >" + menu.name + "</span>" +
+						"</a>" +
+						"</dd>" +
+						"</dl>";
+					findChildMenu(menu.id, menuList);
+				}
+
+			}
+			return subMenuStr;
+		}
+
+		function gerSysResource() {
+			getAsync(
+				"/sysResource/currentUser",
+				"",
+				function(result) {
+					var _data = result.data;
+					genMenu(_data);
+					/*var element = layui.element;
+					element.render('nav'); //初始化element事件，使菜单展开
+					//新增一个Tab项
+					element.tabAdd('menuFilter', {
+						title: '新选项' + (Math.random() * 1000 | 0) //用于演示
+							,
+						content: '内容' + (Math.random() * 1000 | 0),
+						id: new Date().getTime() //实际使用一般是规定好的id，这里以时间戳模拟下
+					});
+*/
+				},
+				function() {
+					alert("error");
+				}
+			);
+		}
+
+		//登出
+		$("#logout").click(function() {
+			//ajax封装
+			get(
+				"/logout",
+				"",
+				function(result) {
+					var retCode = result.retCode;
+
+					if(retCode == 200) {
+						top.location.href = "./login.html";
+					}
+				},
+				function() {
+					alert("error");
+				}
+			)
+		})
+	</script>
+
+</html>

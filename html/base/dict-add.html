@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+  
+  <head>
+    <meta charset="UTF-8">
+    <title>风控后台系统管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+   <link rel="stylesheet" href="../../static/css/font.css">
+		<link rel="stylesheet" href="../../static/css/xadmin.css">
+		<link rel="stylesheet" type="text/css" href="../../static/layui/css/layui.css" />		
+		<script type="text/javascript" src="../../static/js/jquery.min.js"></script>
+		<script type="text/javascript" src="../../static/layui/layui.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../../static/js/xadmin.js"></script>
+		<script type="text/javascript" src="../../static/js/manage.js"></script>
+		
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script type="text/javascript">
+	    	$(document).ready(function(){
+	    		//点击添加数据
+	    		$("#add").click(function(){
+	    			putData();
+	    		});
+	    	});
+    	
+	   
+    			//ajax发送前台数据
+    			function putData(){
+		    			var _dictCode = $("#_dictCode").val(); //字典代码
+			        var _dictName = $("#_dictName").val(); //字典名称
+			        var _dictValue = $("#_dictValue").val(); //字典值
+			        var _dictDesc = $("#_dictDesc").val(); //字典描述
+			        var _dictValueType = $("#_dictValueType").val(); //字典值类型
+			        var _isValid = $("#_isValid option:selected").val(); //是否生效
+			        var _pdictCode = $("#_pdictCode").val(); //上级字典代码
+			        
+		    				//传入后台数据
+			    		var jsonData = {
+			    		 dictCode: _dictCode, 
+			    		 dictName: _dictName, 
+		  				 dictValue: _dictValue, 
+		  				 dictDesc: _dictDesc, 
+			    		 dictValueType: _dictValueType, 
+		  				 isValid: _isValid, 
+		  				 pdictCode: _pdictCode
+			      	};
+		    				//,#x-right"清空数据
+		    			
+		    			//ajax封装
+						post(
+							"/riskDict/insert",
+							jsonData,
+							function(result) {
+		    		
+		    				var msg = result.retMsg;
+		    				
+		    				layer.alert(msg, {icon: 6},function () {
+                // 获得frame索引
+                var index = parent.layer.getFrameIndex(window.name);
+                //关闭当前frame
+                parent.layer.close(index);
+                 // 父页面刷新  
+                parent.location.reload();
+           		 });
+		              
+		             // alert("success");
+		               
+	    			},
+	    			function () {   
+	             alert("error");
+	            }
+	    			)
+    			}
+    			
+    </script>
+  </head>
+  
+  <body>
+    <div class="x-body">
+        <form class="layui-form">
+          <div class="layui-form-item">
+              <label for="_dictCode" class="layui-form-label">
+                  <span class="x-red">*</span>字典代码
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="_dictCode" name="email" required="" lay-verify="code"
+                  autocomplete="off" class="layui-input">
+              </div>
+              <div class="layui-form-mid layui-word-aux">
+                 <span class="x-red">*</span>留位置写提示留位置写提示
+              </div>
+          </div>
+          <div class="layui-form-item">
+              <label for="_dictName" class="layui-form-label">
+                  <span class="x-red">*</span>字典名称
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="_dictName" name="username" required="" lay-verify="nikename"
+                  autocomplete="off" class="layui-input">
+              </div>
+          </div>
+          <div class="layui-form-item">
+              <label for="_dictValue" class="layui-form-label">
+                  <span class="x-red">*</span>字典值
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="_dictValue" name="pass" required="" lay-verify="pass"
+                  autocomplete="off" class="layui-input">
+              </div>
+              <div class="layui-form-mid layui-word-aux">
+                		<span class="x-red">*</span>留位置写提示？
+              </div>
+          </div>
+          <div class="layui-form-item">
+              <label for="_dictDesc" class="layui-form-label">
+                  <span class="x-red">*</span>字典描述
+              </label>
+              <div class="layui-input-inline">
+                  <textarea id="_dictDesc" rows="3" cols="20" class="layui-input">
+									</textarea>
+              </div>
+             
+          </div>
+          <div class="layui-form-item">
+              <label for="_dictValueType" class="layui-form-label">
+                  <span class="x-red">*</span>字典值类型
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="_dictValueType" name="repass" required="" lay-verify="repass"
+                  autocomplete="off" class="layui-input">
+              </div>
+          </div>
+          <div class="layui-form-item">
+              <label for="_isValid" class="layui-form-label">
+                  <span class="x-red">*</span>是否生效
+              </label>
+              <div class="layui-input-inline">
+                  <select id="_isValid">
+										<option value="Y">Y</option>
+										<option value="N">N</option>
+								  </select>
+              </div>
+              <div class="layui-form-mid layui-word-aux">
+                 <span class="x-red">*</span>Y or N
+              </div>
+          </div>
+          <div class="layui-form-item">
+              <label for="_pdictCode" class="layui-form-label">
+                  <span class="x-red">*</span>上级字典代码
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="_pdictCode" name="repass" required="" lay-verify="repass"
+                  autocomplete="off" class="layui-input">
+              </div>
+          </div>
+          <div class="layui-form-item">
+              <label for="L_repass" class="layui-form-label">
+              </label>
+              <button type="button" id="add" class="layui-btn" lay-filter="add" lay-submit="">
+                  增加
+              </button>
+          </div>
+      </form>
+    </div>
+    <script>
+        layui.use(['form','layer'], function(){
+            $ = layui.jquery;
+          var form = layui.form
+          ,layer = layui.layer;
+        
+        });
+    </script>
+  </body>
+
+</html>

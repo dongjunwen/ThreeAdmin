@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html>
+  
+  <head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.0</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="./css/font.css">
+    <link rel="stylesheet" href="./css/xadmin.css">
+    <link rel="stylesheet" type="text/css" href="lib/layui/css/layui.css"/>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="./lib/layui/layui.js" charset="utf-8"></script>
+		<script type="text/javascript" src="./static/layui/layui.all.js" charset="utf-8"></script>
+    <script type="text/javascript" src="./js/xadmin.js"></script>
+		<script type="text/javascript" src="./js/manage.js"></script>
+    
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+        <script type="text/javascript">
+	    	$(document).ready(function(){
+	    		//点击添加数据
+	    		$("#addDeploy").click(function(){
+	    			putData();
+	    		});
+	    		
+	    	});
+    	
+	   
+    			//ajax发送前台数据
+    			function putData(){
+		    		var _ruleCode = $("#_ruleCode").val(); //规则编码
+			        var _ruleName = $("#_ruleName").val(); //规则名称
+			        var _useTypeName = $("#_useTypeName option:selected").val(); //使用方式
+			        var _andOr = $("#_andOr option:selected").val(); //组合方式
+			        var _ruleFreqName = $("#_ruleFreqName option:selected").val(); //规则频率
+			        var _dealWayName = $("#_dealWayName option:selected").val(); //处理方式
+			        var _ruleStatusName = $("input[name='_ruleStatusName']:checked").val();//状态
+			        var _startTime = $("#start").val(); //开始时间
+			        var _endTime = $("#end").val();//结束时间
+			        var _testTable = $("#history_income_list").val();//table
+			        
+			        console.log("_useTypeName=====",_useTypeName);
+		    			//传入后台数据
+			    		var jsonData = {
+			    		 ruleCode: _ruleCode, 
+			    		 ruleName: _ruleName, 
+		  				 dictValue: _useTypeName, 
+		  				 dictDesc: _andOr, 
+			    		 dictValueType: _ruleFreqName, 
+		  				 isValid: _dealWayName, 
+		  				 pdictCode: _ruleStatusName,
+		  				 startTime: _startTime,
+		  				 endTime: _endTime,
+		  				 riskRuleParamVoList: []
+			      	};
+		    				//,#x-right"清空数据
+		    			
+		    			$.ajax({
+		    			url : fk_url+"/riskRule/saveData",//后台请求的数据
+		    			type : "post",
+		    			dataType : "json",//数据格式 
+		    			contentType: "application/json; charset=utf-8",
+		    	   	data : JSON.stringify(jsonData),
+		    	   	async: false,
+		    	   	
+		    			success:function(result){
+		    		
+		    				//layer.alert("增加成功", {icon: 6},function () {
+			                // 获得frame索引
+			                //var index = parent.layer.getFrameIndex(window.name);
+			                //关闭当前frame
+			                //parent.layer.close(index);
+			                 // 父页面刷新  
+			                //parent.location.reload();
+			           		 //});
+		              
+		              alert("success");
+		               
+	    			},
+	    			 error: function (data) {   
+			             alert("error");
+			            }
+	    			})
+    			}
+    </script>
+  </head>
+  <style>
+  	.layui-mf-w50{width: 50%;margin-right: 0px;float: left;clear: none;}
+  </style>
+  <body>
+    <div class="x-body">
+        <form class="layui-form">
+          <div class="layui-form-item layui-mf-w50">
+              <label for="_ruleCode" class="layui-form-label">
+                  <span class="x-red">*</span>规则编码
+              </label>
+              <div class="layui-input-inline"><!--lay-verify="required"非空-->
+                  <input type="text" id="_ruleCode" name="_ruleCode" required="" 
+                  autocomplete="off" class="layui-input">
+              </div>
+          </div>
+          <div class="layui-form-item layui-mf-w50">
+              <label for="_ruleName" class="layui-form-label">
+                  <span class="x-red">*</span>规则名称
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="_ruleName" name="_ruleName" required=""
+                  autocomplete="off" class="layui-input">
+              </div>
+          </div>
+          <div class="layui-form-item layui-mf-w50" id="_useTypeName">
+              <label for="_useTypeName" class="layui-form-label">
+                  <span class="x-red">*</span>使用方式
+              </label>
+              <div class="layui-input-inline">
+                  <select  name="_useTypeName" class="valid" lay-filter="_useTypeName">
+                    <option value="01">事前</option>
+                    <option value="02">事中</option>
+                    <option value="03">事后</option>
+                  </select>
+              </div>
+          </div>
+          <div class="layui-form-item layui-mf-w50" id="_andOr" >
+              <label for="_andOr" class="layui-form-label">
+                  <span class="x-red">*</span>组合方式
+              </label>
+              <div class="layui-input-inline">
+                  <select name="_andOr" lay-filter="_andOr">
+                    <option value="AND">AND</option>
+                    <option value="OR">OR</option>
+                  </select>
+              </div>
+          </div>
+          <div class="layui-form-item layui-mf-w50" id="_ruleFreqName">
+              <label for="_ruleFreqName" class="layui-form-label">
+                  <span class="x-red">*</span>规则频率
+              </label>
+              <div class="layui-input-inline">
+                  <select name="_ruleFreqName" lay-filter="_ruleFreqName">
+                    <option value="01">实时</option>
+                    <option value="02">按分钟</option>
+                    <option value="03">按小时</option>
+                    <option value="04">按天</option>
+                    <option value="05">按月</option>
+                    <option value="06">年</option>
+                  </select>
+              </div>
+          </div>
+          <div class="layui-form-item layui-mf-w50" id="_dealWayName">
+              <label for="_dealWayName" class="layui-form-label">
+                  <span class="x-red">*</span>处理方式
+              </label>
+              <div class="layui-input-inline">
+                  <select name="_dealWayName" lay-filter="_dealWayName">
+                    <option value="01">拦截</option>
+                    <option value="02">失败</option>
+                    <option value="03">报警</option>
+                  </select>
+              </div>
+          </div>
+          <div class="layui-form-item layui-mf-w50" id="_startTime">
+              <label for="_dealWayName" class="layui-form-label">
+                  <span class="x-red">*</span>生效起始日期
+              </label>
+              <div class="layui-input-inline">
+                  <input class="layui-input" placeholder="起始日" name="start" id="start">
+              </div>
+          </div>
+          <div class="layui-form-item layui-mf-w50" id="endTime">
+              <label for="_dealWayName" class="layui-form-label">
+                  <span class="x-red">*</span>生效结束日期
+              </label>
+              <div class="layui-input-inline">
+                 <input class="layui-input" placeholder="结束日" name="end" id="end">
+              </div>
+          </div>
+          <div class="layui-form-item layui-mf-w50">
+              <label for="_ruleStatusName" class="layui-form-label">
+                  <span class="x-red">*</span>状态
+              </label>
+			      	<input type="radio" name="_ruleStatusName" value="Y" title="有效" checked=""><div class="layui-unselect layui-form-radio layui-form-radioed"><i class="layui-anim layui-icon"></i><span>有效</span></div>
+			      	<input type="radio" name="_ruleStatusName" value="N" title="无效"><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><span>无效</span></div>
+          </div>
+          <div class="layui-form-item layui-mf-w50" style="margin-bottom: 50px;">
+              <label for="L_repass" class="layui-form-label">
+              </label>
+              <button type="button" id="addDeploy" class="layui-btn" >保存 </button>
+          </div>
+          <div class="layui-form-item layui-form-text">
+              <div class="layui-input-block" style="margin-left: 0;">
+                  <table class="layui-table" id="table1">
+                      <tr id="tr0">
+                        <th>参数编码</th>
+                        <th>参数名称</th>
+                        <th>是否必填项</th>
+                        <th>比较运算符</th>
+                        <th>参数值</th>
+                        <th>参数值类型</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                      </tr>
+                      <tbody id="history_income_list">
+                      	<tr id="tr1">
+	                        <td><input class="layui-input" type="text" value="模糊匹配" name="pp" disabled=""/></td>
+	                        <td><input class="layui-input" type="text" value="自动带出" name="dc" disabled=""/></td>
+	                        <td>
+	                        	<input type="radio" name="yesno" value="是" title="是" checked=""><div class="layui-unselect layui-form-radio layui-form-radioed"><i class="layui-anim layui-icon"></i><span>是</span></div>
+				      							<input type="radio" name="yesno" value="否" title="否"><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><span>否</span></div>
+	                        </td>
+	                        <td>
+	                        	<select name="contrller">
+					                    <option>></option>
+					                    <option><</option>
+					                    <option>>=</option>
+					                    <option><=</option>
+					                    <option><></option>
+					                    <option>=</option>
+					                    <option>IN</option>
+					                    <option>NOT IN</option>
+					                  </select>
+	                        </td>
+	                        <td>录入</td>
+	                        <td>
+	                        	<select name="contrller">
+					                    <option>文本</option>
+					                    <option>数值</option>
+					                  </select>
+	                        </td>
+	                        <td>
+                        	<input type="radio" name="valid2" value="有效" title="有效" checked=""><div class="layui-unselect layui-form-radio layui-form-radioed"><i class="layui-anim layui-icon"></i><span>有效</span></div>
+			      							<input type="radio" name="valid2" value="无效" title="无效"><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><span>无效</span></div>
+                        </td>
+                        <td>修改|保存</td>
+                      </tr>
+                    </tbody>
+                  </table>
+              </div>
+          </div>
+          <div class="layui-form-item">
+              <label for="L_repass" class="layui-form-label" style="padding: 0;">
+              </label>
+              <button type="button" class="layui-btn" name="button3" id="button3" value="新增一行" onclick="btnAddRow()"/>增加</button>
+              <button type="button" class="layui-btn" name="button4" id="button4" value="test" onclick="getCheckData()"/>测试</button>
+          </div>
+      </form>
+    </div>
+    <script>
+    	
+    	function getCheckData(){
+    		 getUser("table1");  
+    		 
+    	}
+    	    //得到表格数据	 
+    	function getUser(tableID){  
+	        var args = {};  
+	        $("#"+tableID+" tr:gt(0)").each(function(i){  
+	            var data = new Object();  
+	            $(this).find("select[name],input[name]").each(function(){  
+	                var name = $(this).attr("name");  
+	                
+	                data[name]= $(this).val();  
+	            });  
+	            args[i]=data;  
+	        });  
+	        alert("data;"+JSON.stringify(args));  
+	        return JSON.stringify(args);  
+    	}  
+    	    
+    </script>
+    
+<script type="text/javascript">
+
+	//form里面select radio的渲染
+	function loadForm(){
+		layui.use('form', function() {
+				var form = layui.form;
+	
+				form.render();
+			});
+	}
+	//每一行的索引
+	var index = 3;
+	function btnAddRow(){
+	 //创建新行的id
+	 var rId = "tr" + index;
+	  //创建是否的radio的name属性
+	 var rYesno = "yesno" ;
+	 //创建有效的radio的name属性
+	 var rValid = "valid" + index;
+	 //随机数
+	 //table对象
+	 var table1 = document.getElementById("table1");
+	 //行数
+	 var rowCount = table1.rows.length;
+	 //添加到最后一行
+	 var newRow = table1.insertRow(rowCount);
+	 //添加ID
+	 newRow.id = rId;
+	 //给第一列添加
+	 var newCell1 = newRow.insertCell(0);
+	 //内容
+	 newCell1.innerHTML = "模糊匹配";
+	 //给第二列添加
+	 var newCell2 = newRow.insertCell(1);
+	 //内容
+	 newCell2.innerHTML = "自动带出";
+	 //给第三列添加
+	 var newCell3 = newRow.insertCell(2);
+	 //内容
+	 newCell3.innerHTML = "<input type='radio' name='"+rYesno+"' value='是' title='是' checked=''><div class='layui-unselect layui-form-radio layui-form-radioed'><i class='layui-anim layui-icon'></i><span>是</span></div><input type='radio' name='"+rYesno+"' value='否' title='否'><div class='layui-unselect layui-form-radio'><i class='layui-anim layui-icon'></i><span>否</span></div>";
+	 loadForm()//渲染
+	 //给第四列添加
+	 var newCell4 = newRow.insertCell(3);
+	 //内容
+	 newCell4.innerHTML = "<select name='contrller1'><option>></option><option><</option><option>>=</option><option><=</option><option><></option><option>=</option><option>IN</option><option>NOT IN</option></select>";
+	 loadForm()//渲染
+	 //给第五列添加
+	 var newCell5 = newRow.insertCell(4);
+	 //内容
+	 newCell5.innerHTML = "录入";
+	  //给第六列添加
+	 var newCell6 = newRow.insertCell(5);
+	 //内容
+	 newCell6.innerHTML = "<select name='contrller'><option>文本</option><option>数值</option></select>";
+	 loadForm()//渲染
+	  //给第七列添加
+	 var newCell7 = newRow.insertCell(6);
+	 //内容
+	 newCell7.innerHTML = "<input type='radio' name='"+rValid+"' value='有效' title='有效' checked=''><div class='layui-unselect layui-form-radio layui-form-radioed'><i class='layui-anim layui-icon'></i><span>有效</span></div><input type='radio' name='"+rValid+"' value='无效' title='无效'><div class='layui-unselect layui-form-radio'><i class='layui-anim layui-icon'></i><span>无效</span></div>";
+	 loadForm()//渲染
+	   //给第八列添加
+	 var newCell8 = newRow.insertCell(7);
+	 //内容
+	 newCell8.innerHTML = "修改|保存";
+	 //变量++
+	 index ++;
+	}
+</script>
+    <script>
+    	
+		layui.use('laydate', function(){
+	        var laydate = layui.laydate;
+	        
+	        //执行一个laydate实例
+	        laydate.render({
+	          elem: '#start' //指定元素
+	        });
+	
+	        //执行一个laydate实例
+	        laydate.render({
+	          elem: '#end' //指定元素
+	        });
+	        
+	      });
+	      
+    </script>
+  </body>
+
+</html>

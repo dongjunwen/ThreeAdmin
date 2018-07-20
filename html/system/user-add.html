@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>欢迎页面-X-admin2.0</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+		<link rel="stylesheet" href="../../static/css/font.css">
+		<link rel="stylesheet" href="../../static/css/xadmin.css">
+		<link rel="stylesheet" type="text/css" href="../../static/layui/css/layui.css" />		
+		<script type="text/javascript" src="../../static/js/jquery.min.js"></script>
+		<script type="text/javascript" src="../../static/layui/layui.all.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../../static/layui/layui.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../../static/js/xadmin.js"></script>
+		<script type="text/javascript" src="../../static/js/manage.js"></script>
+		
+		
+		<link rel="stylesheet" href="../../static/css/metroStyle/metroStyle.css" type="text/css">
+		<script type="text/javascript" src="../../static/js/ztree/jquery.ztree.core.js"></script>
+		<script type="text/javascript" src="../../static/js/ztree/jquery.ztree.excheck.js"></script>
+		<!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+		<!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script>
+    	var setting = {
+			check: {
+				enable: true,
+				chkboxType: {"Y":"", "N":""}
+			},
+			view: {
+				dblClickExpand: false
+			},
+			data: {
+				simpleData: {
+					enable: true
+				}
+			},
+			callback: {
+				beforeClick: beforeClick,
+				onCheck: onCheck
+			}
+		};
+
+		var zNodes =[
+			
+		 ];
+		 
+		 function showRole(){
+				var cityObj = $("#userRole");
+			var cityOffset = $("#userRole").offset();
+			$("#menuContent").css({left:cityOffset.left + "px", top:cityOffset.top + cityObj.outerHeight() + "px"}).slideDown("fast");
+
+			$("body").bind("mousedown", onBodyDown);
+			}
+		 
+		 function beforeClick(treeId, treeNode) {
+			var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+			zTree.checkNode(treeNode, !treeNode.checked, null, true);
+			return false;
+		}
+		
+		function onCheck(e, treeId, treeNode) {
+			var zTree = $.fn.zTree.getZTreeObj("treeDemo"),
+			nodes = zTree.getCheckedNodes(true),
+			v = "";
+			for (var i=0, l=nodes.length; i<l; i++) {
+				v += nodes[i].name + ",";
+			}
+			if (v.length > 0 ) v = v.substring(0, v.length-1);
+			/*var cityObj = $("#userRole");
+			cityObj.attr("value", v);*/
+			$("#userRole").val(v);
+		}
+		function hideMenu() {
+			$("#menuContent").fadeOut("fast");
+			$("body").unbind("mousedown", onBodyDown);
+		}
+		function onBodyDown(event) {
+			if (!(event.target.id == "menuBtn" || event.target.id == "userRole" || event.target.id == "menuContent" || $(event.target).parents("#menuContent").length>0)) {
+				hideMenu();
+			}
+		}
+
+		$(document).ready(function(){
+			getRoleList();			
+			$.fn.zTree.init($("#treeDemo"), setting, zNodes);
+		});
+		function getRoleList(){
+			//ajax封装
+			post(
+				"/sysRole/listAll",
+				null,
+				function(result) {
+						zNodes = result.data; //获取list中的数据
+				},
+				function() {
+					alert("error");
+				}
+			);		
+		}
+    	
+    	
+    </script>
+
+	</head>
+	<style>
+		.layui-mf-w50 {
+			width: 50%;
+			margin-right: 0px;
+			float: left;
+			clear: none;
+		}
+	</style>
+
+	<body>
+		<div class="x-body">
+			<blockquote class="layui-elem-quote layui-text">
+				注意：初始密码为：
+				<a href="javascript:;">123456</a>
+			</blockquote>
+			<form class="layui-form">
+				<div class="layui-form-item layui-mf-w50">
+					<label for="_userNo" class="layui-form-label">
+                  <span class="x-red">*</span>账号
+              </label>
+					<div class="layui-input-inline" id="ruleCode">
+						<input type="text" id="userNo" name="_userNo" class="layui-input" placeholder="请输入账号" value="">
+					</div>
+				</div>
+				<div class="layui-form-item layui-mf-w50">
+					<label for="_userName" class="layui-form-label">
+                  <span class="x-red">*</span>姓名
+              </label>
+					<div class="layui-input-inline" id="ruleName">
+						<input type="text" id="userName" name="_userName" class="layui-input" placeholder="请输入姓名" value="">
+					</div>
+				</div>
+				<div class="layui-form-item layui-mf-w50">
+					<label for="_nickName" class="layui-form-label">
+                  <span class="x-red"></span>昵称
+              </label>
+					<div class="layui-input-inline">
+						<input type="text" id="nickName" name="_nickName" class="layui-input" placeholder="请输入昵称" value="">
+					</div>
+				</div>
+				<div class="layui-form-item layui-mf-w50">
+					<label for="_phoneNum" class="layui-form-label">
+                  <span class="x-red"></span>手机号
+              </label>
+					<div class="layui-input-inline">
+						<input type="text" id="phoneNum" name="_phoneNum" class="layui-input" placeholder="请输入手机号" value="">
+					</div>
+				</div>
+				<div class="layui-form-item layui-mf-w50">
+					<label for="_emailAddr" class="layui-form-label">
+                  <span class="x-red"></span>邮箱地址
+              </label>
+					<div class="layui-input-inline">
+						<input type="text" id="emailAddr" name="_emailAddr" class="layui-input" placeholder="请输入邮箱地址" value="">
+					</div>
+				</div>
+				<div class="layui-form-item layui-mf-w50">
+					<label for="_status" class="layui-form-label">
+                  <span class="x-red"></span>账号状态
+              </label>
+					<div class="layui-input-inline">
+						<select id="status">
+							<option value="Y">启用</option>
+							<option value="N">禁止</option>
+						</select>
+					</div>
+				</div>
+				<div class="layui-form-item layui-mf-w50">
+					<label for="_emailAddr" class="layui-form-label">
+                  <span class="x-red"></span>用户角色
+              </label>
+					<div class="layui-input-inline">
+						<input type="text" id="userRole" name="roleStrs" class="layui-input"  value="" onclick="showRole();">
+					</div>
+				</div>
+				<div class="layui-form-item layui-mf-w50" style="margin-bottom: 50px;">
+					<label for="L_repass" class="layui-form-label">
+              </label>
+					<button type="button" id="addUser" class="layui-btn">保存 </button>
+				</div>
+			</form>
+		</div>
+		
+		<div id="menuContent" class="menuContent" style="display:none; position: absolute;">
+			<ul id="treeDemo" class="ztree" style="margin-top:0; width:180px; height: 300px;"></ul>
+		</div>
+
+		<script>
+			
+			
+			$("#addUser").click(function() {
+
+				var _userNo = $("#userNo").val(); //账号
+				var _userName = $("#userName").val(); //姓名
+				var _nickName = $("#nickName").val(); //昵称
+				var _phoneNum = $("#phoneNum").val(); //手机号
+				var _emailAddr = $("#emailAddr").val(); //邮箱地址
+				var _status = $("#status option:selected").val(); //账号状态
+				
+				
+				//传入后台角色数据
+				var userRoles = [];
+				var userRole={};
+				
+				var zTree = $.fn.zTree.getZTreeObj("treeDemo"),
+				nodes = zTree.getCheckedNodes();
+				for (var i=0, l=nodes.length; i<l; i++) {
+					if(nodes[i].checked) {
+						userRole={roleCode:nodes[i].roleCode,roleName:nodes[i].roleName};
+						userRoles.push(userRole);
+				
+					}
+				}
+
+				//传入后台数据
+				var jsonData = {
+					userNo: _userNo,
+					userName: _userName,
+					nickName: _nickName,
+					phoneNum: _phoneNum,
+					emailAddr: _emailAddr,
+					status: _status,
+					sysUserRoleVos:userRoles
+				};
+
+				//ajax封装
+				post(
+					"/user",
+					jsonData,
+					function(result) {
+						var msg = result.retMsg;
+						layer.alert(msg, {
+							icon: 6
+						}, function() {
+							// 获得frame索引
+							var index = parent.layer.getFrameIndex(window.name);
+							//关闭当前frame
+							parent.layer.close(index);
+							// 父页面刷新  
+							parent.location.reload();
+						});
+
+					},
+					function() {
+						alert("error");
+					}
+				)
+			})
+		</script>
+	</body>
+
+</html>

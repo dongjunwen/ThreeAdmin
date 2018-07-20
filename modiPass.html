@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>风控后台系统管理</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+		<link rel="stylesheet" href="./static/css/font.css">
+		<link rel="stylesheet" href="./static/css/xadmin.css">
+		<link rel="stylesheet" type="text/css" href="./static/layui/css/layui.css" />
+		<script type="text/javascript" src="./static/js/jquery.min.js"></script>
+		<script type="text/javascript" src="./static/layui/layui.js" charset="utf-8"></script>
+		<script type="text/javascript" src="./static/js/xadmin.js"></script>
+		<script type="text/javascript" src="./static/js/manage.js"></script>
+		<script type="text/javascript" src="./static/layui/layui.all.js" charset="utf-8"></script>
+		<script type="text/javascript" src="./static/layui/lay/modules/laypage.js"></script>
+		<!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+		<!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+		<script type="text/javascript">
+			$(document).ready(function() {
+				getUser();
+			});
+
+			var _userNo = "";
+
+			function getUser() {
+				//ajax封装-获取用户名
+				get(
+					"/getCurrentUser",
+					"",
+					function(result) {
+						var retCode = result.retCode;
+						var _data = result.data; //取到数据
+						var str = "";
+						_userNo = _data.userNo;
+						if(retCode == 200) {
+
+							$("#L_username").val(_data.userName);
+
+						}
+					},
+					function() {
+						alert("error");
+					}
+				)
+			}
+		</script>
+	</head>
+
+	<body>
+		<div class="x-body">
+			<form method="post" class="layui-form">
+				<div class="layui-form-item">
+					<label for="L_username" class="layui-form-label">用户名</label>
+					<div class="layui-input-inline">
+						<input type="text" id="L_username" name="username" disabled="" value="" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">
+                  <span class="x-red">*</span>原始密码
+              </label>
+					<div class="layui-input-inline">
+						<input type="password" id="_oldPass" placeholder="原始密码" name="oldpass" lay-verify="required" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">
+                  <span class="x-red">*</span>新密码
+              </label>
+					<div class="layui-input-inline">
+						<input type="password" id="_pwd1" placeholder="新密码" name="newpass" lay-verify="required" class="layui-input">
+					</div>
+					<div class="layui-form-mid layui-word-aux">6到16个字符</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">
+                  <span class="x-red">*</span>确认密码
+              </label>
+					<div class="layui-input-inline">
+						<input type="password" id="_pwd2" placeholder="确认新密码" name="repass" lay-verify="required" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">
+              </label>
+					<button type="button" class="layui-btn" id="btnPWD" lay-submit lay-filter="login">修改</button>
+				</div>
+			</form>
+		</div>
+		<script>
+			layui.use(['form', 'layer'], function() {
+				$ = layui.jquery;
+				var form = layui.form,
+					layer = layui.layer;
+
+				$("#btnPWD").click(function() {
+					var _oldPass = $("#_oldPass").val();
+					var _pwd1 = $("#_pwd1").val();;
+					var _pwd2 = $("#_pwd2").val();;
+
+					jsonData = {
+						oldPass: _oldPass,
+						passwordNew1: _pwd1,
+						passwordNew2: _pwd2,
+						userNo: _userNo
+					}
+					//ajax封装
+					post(
+						"/modiPass",
+						jsonData,
+						function(result) {
+
+							var rsg = result.retMsg;
+							if(result.retCode == 200) {
+
+								layer.alert(rsg, {
+									icon: 6
+								}, function() {
+									// 获得frame索引
+									var index = parent.layer.getFrameIndex(window.name);
+									//关闭当前frame
+									parent.layer.close(index);
+								});
+							} else {
+								layer.alert(rsg, {
+									icon: 5
+								});
+							}
+						},
+						function() {
+							alert("error");
+						}
+					)
+				})
+
+			});
+			
+			//判断是否敲击了Enter键 
+			$(document).keyup(function(event) {
+				if(event.keyCode == 13) {
+					$("#btnPWD").trigger("click");
+				}
+			});
+		</script>
+	</body>
+
+</html>

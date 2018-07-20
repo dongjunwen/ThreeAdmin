@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>风控后台系统管理</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+		<link rel="stylesheet" href="../../static/css/font.css">
+		<link rel="stylesheet" href="../../static/css/xadmin.css">
+		<link rel="stylesheet" type="text/css" href="../../static/layui/css/layui.css" />
+		<script type="text/javascript" src="../../static/js/jquery.min.js"></script>
+		<script type="text/javascript" src="../../static/layui/layui.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../../static/js/xadmin.js"></script>
+		<script type="text/javascript" src="../../static/js/manage.js"></script>
+		<script type="text/javascript" src="../../static/layui/layui.all.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../../static/layui/lay/modules/laypage.js"></script>
+		
+		<link rel="stylesheet" href="../../static/css/metroStyle/metroStyle.css" type="text/css">
+		<script type="text/javascript" src="../../static/js/ztree/jquery.ztree.core.js"></script>
+		<script type="text/javascript" src="../../static/js/ztree/jquery.ztree.excheck.js"></script>
+		<!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+		<!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+		<script type="text/javascript">
+			var setting = {
+				data: {
+					key: {
+						title:"t"
+					},
+					simpleData: {
+						enable: true
+					}
+				},
+				callback: {					
+					onClick: onClick
+				}
+			};			
+			
+			var zNodes =[			     
+			  ];
+			var selectedSourceId;
+			var sourceLevel=1;
+			function onClick(event, treeId, treeNode, clickFlag) {
+				$("#sourceId").val(treeNode.sourceId);
+				$("#sourceNo").val(treeNode.sourceNo);
+				$("#sourceName").val(treeNode.name);
+				$("#psourceNo").val(treeNode.pId);
+				$("#reqUrl").val(treeNode.route);
+				$("#sourceIcon").val(treeNode.icon);
+				$("#sourceType").val(treeNode.sourceType);
+				$("#sortOrder").val(treeNode.sortOrder);
+				$("#ifVisible").val(treeNode.ifVisible);
+				selectedSourceId=treeNode.id;
+				sourceLevel=treeNode.sourceLevel;
+			}		
+			
+
+			$(document).ready(function() {
+				getData();								
+				$.fn.zTree.init($("#treeDemo"), setting, zNodes);
+			});
+			
+			function anddResource(){
+				x_admin_show('添加资源','./sysResource-add.html?pid='+selectedSourceId+'&sourceLevel='+sourceLevel);
+			}
+			
+			//传入后台数据
+				var jsonData = {
+					pageNum: 1,
+				};
+				
+			//ajax请求后台数据
+			function getData() {
+				//ajax封装
+				post(
+					"/sysResource/listAll",
+					jsonData,
+					function(result) {
+							zNodes = result.data; //获取list中的数据
+					},
+					function() {
+						alert("error");
+					}
+				);			
+			}			
+		</script>
+	</head>
+
+	<body>
+		<div class="x-nav">
+			<span class="layui-breadcrumb" style="visibility: visible;">
+        <a href="javascript:;">首页<span class="layui-box">&gt;</span></a>
+			<a href="javascript:;">系统管理<span class="layui-box">&gt;</span></a>
+			<a><cite>资源信息</cite></a>
+			</span>
+			<a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
+				<i class="layui-icon" style="line-height:30px">ဂ</i></a>
+		</div>
+		<div class="x-body">
+			<div class="layui-row" style="display: none;">
+				<form class="layui-form layui-col-md12 x-so">
+					<label>资源名称：</label><input type="text" name="sysResourceCondVo" id="sysResourceCondVo" placeholder="请输入资源名称" autocomplete="off" class="layui-input">
+					<button type="button" id="sreach" class="layui-btn"><i class="layui-icon">&#xe615;</i></button>
+				</form>
+			</div>
+			<xblock>
+				<button class="layui-btn" onclick="anddResource()"><i class="layui-icon"></i>添加</button>
+				<span class="x-right" style="line-height:40px"></span>
+			</xblock>
+
+			
+			<div class="zTreeDemoBackground left" style="float: left;">
+				<ul id="treeDemo" class="ztree"></ul>
+			</div>
+
+			<div class="x-body" style="float: left;">
+				<form class="layui-form">
+					<input type="hidden" id="sourceId" name="id" class="layui-input" placeholder="id" value="">
+					<div class="layui-form-item layui-mf-w50">
+						<label for="_sourceNo" class="layui-form-label">
+	                  <span class="x-red">*</span>资源编号
+	              </label>
+						<div class="layui-input-inline" id="ruleCode">
+							<input type="text" id="sourceNo" name="_sourceNo" class="layui-input" placeholder="资源编号" value="">
+						</div>
+					</div>
+					<div class="layui-form-item layui-mf-w50">
+						<label for="_sourceName" class="layui-form-label">
+	                  <span class="x-red">*</span>资源名称
+	              </label>
+						<div class="layui-input-inline" id="ruleName">
+							<input type="text" id="sourceName" name="_sourceName" class="layui-input" placeholder="资源名称" value="">
+						</div>
+					</div>
+					
+					<div class="layui-form-item layui-mf-w50">
+						<label for="_sourceType" class="layui-form-label">
+	                  <span class="x-red">*</span>资源类型
+	              </label>
+						<div class="layui-input-inline">
+							<select id="sourceType" style="display: block;">
+								<option value="MENU">菜单</option>
+								<option value="BUTTON">按钮</option>
+							</select>
+						</div>
+					</div>
+					<div class="layui-form-item layui-mf-w50">
+						<label for="_reqUrl" class="layui-form-label">
+	                  <span class="x-red">*</span>请求路径
+	              </label>
+						<div class="layui-input-inline">
+							<input type="text" id="reqUrl" name="_reqUrl" class="layui-input" placeholder="请求路径" value="">
+						</div>
+					</div>
+					<div class="layui-form-item layui-mf-w50">
+						<label for="_sourceIcon" class="layui-form-label">
+	                  <span class="x-red">*</span>图标
+	              </label>
+						<div class="layui-input-inline">
+							<input type="text" id="sourceIcon" name="_sourceIcon" class="layui-input" placeholder="图标" value="">
+						</div>
+					</div>
+					<div class="layui-form-item layui-mf-w50" id="_startTime">
+						<label for="_sortOrder" class="layui-form-label">
+	                  		排序
+	              </label>
+						<div class="layui-input-inline">
+							<input type="text" id="sortOrder" name="_sortOrder" class="layui-input" placeholder="排序" value="">
+						</div>
+					</div>					
+					<div class="layui-form-item layui-mf-w50">
+						<label for="_ifVisible" class="layui-form-label">
+	                  		是否显示
+	              </label>
+						<div class="layui-input-inline">
+							<select id="ifVisible" style="display: block;">
+								<option value="Y">是</option>
+								<option value="N">否</option>
+							</select>
+						</div>
+					</div>
+					<div class="layui-form-item layui-mf-w50" style="margin-bottom: 50px;">
+						<label for="L_repass" class="layui-form-label">
+	              </label>
+						<button type="button" id="saveSysResource" class="layui-btn">保存 </button>
+					</div>
+				</form>
+			</div>
+
+		</div>
+	</body>
+	
+	<script>
+			$("#saveSysResource").click(function() {
+				var _id = $("#sourceId").val(); //资源编号
+				var _sourceNo = $("#sourceNo").val(); //资源编号
+				var _sourceName = $("#sourceName").val(); //资源名称
+				var _sourceType = $("#sourceType option:selected").val(); //资源类型
+				var _reqUrl = $("#reqUrl").val(); //请求路径
+				var _sourceIcon = $("#sourceIcon").val(); //图标
+				var _sortOrder = $("#sortOrder").val(); //排序
+				var _sourceLevel = $("#sourceLevel").val(); //级别
+				var _ifVisible = $("#ifVisible option:selected").val(); //级别
+
+				//传入后台数据
+				var jsonData = {
+					id: _id,
+					sourceNo: _sourceNo,
+					sourceName: _sourceName,
+					sourceType: _sourceType,
+					reqUrl: _reqUrl,
+					sourceIcon: _sourceIcon,
+					sortOrder: _sortOrder,
+					sourceLevel: _sourceLevel,
+					ifVisible: _ifVisible
+				};
+
+				//ajax封装
+				post(
+					"/sysResource/update",
+					jsonData,
+					function(result) {
+						var msg = result.retMsg;
+						layer.alert(msg, {
+							icon: 6
+						}, function() {
+							// 获得frame索引
+							var index = parent.layer.getFrameIndex(window.name);
+							//关闭当前frame
+							parent.layer.close(index);
+							// 父页面刷新  
+							parent.location.reload();
+						});
+
+					},
+					function() {
+						alert("error");
+					}
+				)
+			})
+		</script>
+
+</html>

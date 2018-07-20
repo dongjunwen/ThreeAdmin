@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>风控后台系统管理</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+	    <link rel="stylesheet" href="../../static/css/font.css">
+		<link rel="stylesheet" href="../../static/css/xadmin.css">
+		<link rel="stylesheet" type="text/css" href="../../static/layui/css/layui.css" />		
+		<script type="text/javascript" src="../../static/js/jquery.min.js"></script>
+		<script type="text/javascript" src="../../static/layui/layui.all.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../../static/layui/layui.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../../static/js/xadmin.js"></script>
+		<script type="text/javascript" src="../../static/js/manage.js"></script>
+		
+		<link rel="stylesheet" href="../../static/css/metroStyle/metroStyle.css" type="text/css">
+		<script type="text/javascript" src="../../static/js/ztree/jquery.ztree.core.js"></script>
+		<script type="text/javascript" src="../../static/js/ztree/jquery.ztree.excheck.js"></script>
+		<!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+		<!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+		<script type="text/javascript">
+			
+			var setting = {
+			check: {
+				enable: true
+			},
+			data: {
+				simpleData: {
+					enable: true
+				}
+			}
+		};
+
+		var zNodes =[
+			{ id:1, pId:0, name:"随意勾选 1", open:true,checked:true},
+			{ id:11, pId:1, name:"随意勾选 1-1", open:true,checked:true},
+			{ id:111, pId:11, name:"随意勾选 1-1-1",checked:true},
+			{ id:112, pId:11, name:"随意勾选 1-1-2"}			
+		];
+		
+		
+			$(document).ready(function() {
+				putData();
+				$.fn.zTree.init($("#treeDemo"), setting, zNodes);				
+			});
+			//接收上个页面传过来的_roleCode
+			var _roleCode = "";
+
+			function getParams(key) {
+				var reg = new RegExp("(^|&)" + key + "=([^&]*)(&|$)");
+				var r = window.location.search.substr(1).match(reg);
+				if(r != null) {
+					return unescape(r[2]);
+				}
+				return null;
+			};
+				
+			//ID
+			_roleCode = getParams("roleCode");
+		
+			//ajax发送前台数据
+			function putData() {
+				//ajax封装
+				get(
+					"/sysRoleResource/" + _roleCode,
+					"",
+					function(result) {
+						zNodes = result.data; //获取list中的数据
+					},
+					function() {
+						alert("error");
+					}
+				)
+			}
+
+			
+		</script>
+	</head>
+	<style>
+		.layui-mf-w50 {
+			width: 50%;
+			margin-right: 0px;
+			float: left;
+			clear: none;
+		}
+	</style>
+
+	<body>
+		<div class="x-body">
+			<form class="layui-form">
+				<div class="layui-form-item layui-form-text">
+					<div class="zTreeDemoBackground left" style="float: left;">
+						<ul id="treeDemo" class="ztree"></ul>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label for="L_repass" class="layui-form-label" style="padding: 0;">
+              </label>
+					<button type="button" class="layui-btn" name="button3" id="button3" value="保存" onclick="save()" />保存</button>
+				</div>
+			</form>
+			
+			
+		</div>
+		
+		<script>
+					
+			//保存表格数据
+			function save(i) {
+				
+
+				//传入后台数据
+				var jsonData = [];
+				var jsonStr={};
+				
+				var zTree = $.fn.zTree.getZTreeObj("treeDemo"),
+				nodes = zTree.getCheckedNodes();
+				for (var i=0, l=nodes.length; i<l; i++) {
+					if(nodes[i].checked) {
+						jsonStr={sourceNo:nodes[i].sourceNo,roleCode:_roleCode};
+						jsonData.push(jsonStr);
+				
+					}
+				}
+
+				//ajax封装
+				post(
+					"/sysRoleResource/save",
+					jsonData,
+					function(result) {
+						var msg = result.retMsg;
+						layer.msg(msg, {
+							icon: 6
+						});
+
+					},
+					function() {
+						alert("error");
+					}
+				);
+
+			}
+			
+		</script>
+
+	</body>
+
+</html>
